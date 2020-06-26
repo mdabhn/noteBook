@@ -43,8 +43,13 @@
 </template>
 
 <script>
+  import firebase from 'firebase/app'
+  import 'firebase/firestore'
   import Editor from './Editor'
   import Documnets from './Documnets'
+  import databese from '../firebase'
+  import database from 'firebase'
+
   export default {
     name: 'Home',
     components: {
@@ -71,11 +76,32 @@
         this.message = false
       },
       addNote(data) {
-        this.notes.push(data)
+        databese
+          .collection('notes')
+          .add({
+            note: data,
+          })
+          .then(() => {
+            // console.log('Done')
+          })
+          .catch(err => {
+            console.error(err)
+          })
+        this.showDocuments = true
+        this.createContent = false
+        this.message = false
       },
     },
     created() {
       this.message = true
+
+      const ref = databese.collection('notes')
+      ref.onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(data => {
+          console.log(data.doc.data())
+          this.notes.push(data.doc.data().note)
+        })
+      })
     },
   }
 </script>

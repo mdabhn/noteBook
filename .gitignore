@@ -25,3 +25,4 @@ firebase.js
 .firebaserc
 database.rules.json
 firebase.json
+.firebase

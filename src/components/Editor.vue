@@ -26,7 +26,8 @@
     },
     methods: {
       subContent() {
-        console.log(this.content)
+        this.$emit('addNote', this.content)
+        this.content = null
       },
     },
   }

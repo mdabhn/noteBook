@@ -29,13 +29,13 @@
 
       <transition name="fade">
         <div v-if="createContent" class="flex main-side mx-auto mt-4">
-          <Editor />
+          <Editor @addNote="addNote" />
         </div>
       </transition>
 
       <transition name="fade">
         <div class="flex mx-auto" v-if="showDocuments">
-          <Documnets />
+          <Documnets :notes="notes" />
         </div>
       </transition>
     </div>
@@ -56,6 +56,7 @@
         message: false,
         createContent: false,
         showDocuments: false,
+        notes: [],
       }
     },
     methods: {
@@ -69,6 +70,9 @@
         this.showDocuments = false
         this.message = false
       },
+      addNote(data) {
+        this.notes.push(data)
+      },
     },
     created() {
       this.message = true
@@ -77,15 +81,6 @@
 </script>
 
 <style>
-  /* .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.5s;
-  }
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  } */
-
   .fade-enter {
     opacity: 0;
   }

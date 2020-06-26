@@ -76,17 +76,20 @@
         this.message = false
       },
       addNote(data) {
-        databese
-          .collection('notes')
-          .add({
-            note: data,
-          })
-          .then(() => {
-            // console.log('Done')
-          })
-          .catch(err => {
-            console.error(err)
-          })
+        // databese
+        //   .collection('notes')
+        //   .add({
+        //     note: data,
+        //   })
+        //   .then(() => {
+        //     // console.log('Done')
+        //   })
+        //   .catch(err => {
+        //     console.error(err)
+        //   })
+
+        this.notes.push(data)
+
         this.showDocuments = true
         this.createContent = false
         this.message = false
@@ -95,13 +98,13 @@
     created() {
       this.message = true
 
-      const ref = databese.collection('notes')
-      ref.onSnapshot(snapShot => {
-        snapShot.docChanges().forEach(data => {
-          console.log(data.doc.data())
-          this.notes.push(data.doc.data().note)
-        })
-      })
+      // const ref = databese.collection('notes')
+      // ref.onSnapshot(snapShot => {
+      //   snapShot.docChanges().forEach(data => {
+      //     console.log(data.doc.data())
+      //     this.notes.push(data.doc.data().note)
+      //   })
+      // })
     },
   }
 </script>

@@ -18,9 +18,9 @@
 - [x] Show The Notes
 - [x] Realtime update
 
-- [] Auth
-- [] Login
-- [] Logout
+- [x] Auth
+- [x] Login
+- [x] Logout
 
 - [] Firebase Rules
 - [] Responsive

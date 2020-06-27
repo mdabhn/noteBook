@@ -3,3 +3,8 @@
 @tailwind components;
 
 @tailwind utilities;
+
+.w-input {
+  /* width: 18.75rem; */
+  width: 20rem;
+}

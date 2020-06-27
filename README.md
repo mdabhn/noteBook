@@ -17,3 +17,13 @@
 - [x] Create a Note
 - [x] Show The Notes
 - [x] Realtime update
+
+- [] Auth
+- [] Login
+- [] Logout
+
+- [] Firebase Rules
+- [] Responsive
+
+- [] Private Notes
+- [] Password Protect

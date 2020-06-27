@@ -109,6 +109,7 @@
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(data => {
             data.user.updateProfile({ displayName: this.name })
+            this.$router.push({ name: 'Home' })
           })
           .catch(err => {
             console.error(err)

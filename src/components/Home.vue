@@ -4,7 +4,7 @@
       <div class="flex flex-col left-side h-screen bg-gray-300">
         <div class="flex flex-col my-auto w-64">
           <a
-            href="#"
+            href="#/home/"
             class="p-4 text-lg m-3 border-l-4 border-gray-700 hover:bg-gray-500 transition delay-100 duration-100 ease-in-out"
             @click="showContentForm"
           >
@@ -12,7 +12,7 @@
           </a>
 
           <a
-            href="#"
+            href="#/home/"
             class="p-4 text-lg m-3 border-l-4  border-gray-700 hover:bg-gray-500 transition delay-100 duration-100 ease-in-out"
             @click="showDocument"
           >
@@ -22,8 +22,8 @@
       </div>
 
       <transition name="fade">
-        <p v-if="message" class=" capitalize mx-auto my-auto text-3xl">
-          write a new note
+        <p v-if="message" class="capitalize mx-auto my-auto text-3xl">
+          Welcome {{ userName }}, Let's Make a new note
         </p>
       </transition>
 
@@ -45,6 +45,8 @@
 <script>
   import firebase from 'firebase/app'
   import 'firebase/firestore'
+  import 'firebase/auth'
+
   import Editor from './Editor'
   import Documnets from './Documnets'
   import databese from '../firebase'
@@ -58,7 +60,9 @@
     },
     data() {
       return {
+        userName: null,
         message: false,
+        collectionName: null,
         createContent: false,
         showDocuments: false,
         notes: [],
@@ -76,29 +80,43 @@
         this.message = false
       },
       addNote(data) {
-        // databese
-        //   .collection('notes')
-        //   .add({
-        //     note: data,
-        //   })
-        //   .then(() => {
-        //     // console.log('Done')
-        //   })
-        //   .catch(err => {
-        //     console.error(err)
-        //   })
-
-        this.notes.push(data)
-
+        databese
+          .collection(this.collectionName)
+          .add({
+            note: data,
+          })
+          .catch(err => {
+            console.error(err)
+          })
         this.showDocuments = true
         this.createContent = false
         this.message = false
+      },
+      collectData() {
+        const ref = databese.collection(this.collectionName)
+        ref.onSnapshot(snapShot => {
+          snapShot.docChanges().forEach(data => {
+            console.log(data.doc.data())
+            this.notes.push(data.doc.data().note)
+          })
+        })
       },
     },
     created() {
       this.message = true
 
-      // const ref = databese.collection('notes')
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.userName = user.displayName
+          this.collectionName = user.uid
+
+          this.collectData()
+        } else {
+          console.log('Not a registered user')
+        }
+      })
+
+      // const ref = databese.collection(this.collectionName)
       // ref.onSnapshot(snapShot => {
       //   snapShot.docChanges().forEach(data => {
       //     console.log(data.doc.data())

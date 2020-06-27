@@ -45,10 +45,11 @@
 
     <div class="mx-auto my-auto" v-if="signin">
       <h1 class="text-center text-3xl mb-3 uppercase text-white">Sign In</h1>
-      <form @submit.prevent="">
+      <form @submit.prevent="loginUser">
         <input
           type="email"
-          name="mail"
+          name="email"
+          v-model="email"
           class="block p-2 w-input rounded-lg m-1 border-gray-700 border-2 focus:outline-none"
           placeholder="Email"
           required
@@ -56,25 +57,31 @@
         <input
           type="password"
           name="password"
+          v-model="password"
           class="block p-2 w-input rounded-lg m-1 border-gray-700 border-2 focus:outline-none"
           placeholder="Password"
           required
         />
-        <button
-          class="border-2 bg-gray-800 p-2 rounded-lg text-white float-right border-green-500 hover:bg-gray-900"
-        >
-          Sign In
-        </button>
+        <p v-if="error" class="text-red-400 text-sm ml-2 block">
+          Wrong User Name or password
+        </p>
+        <div>
+          <button
+            class="border-2 bg-gray-800 p-2 rounded-lg text-white float-right border-green-500 hover:bg-gray-900"
+          >
+            Sign In
+          </button>
+          <div class="mx-auto my-auto mt-2 ml-2">
+            <a
+              href="#"
+              class="text-white underline hover:text-black ease-in-out delay-150 duration-100 text-sm"
+              @click="signupForm"
+              >If you Haven't Created an account, <br />
+              Sign In</a
+            >
+          </div>
+        </div>
       </form>
-      <div class="mx-auto my-auto mt-3 ml-2">
-        <a
-          href="#"
-          class="text-white underline hover:text-black ease-in-out delay-150 duration-100 text-sm"
-          @click="signupForm"
-          >If you Haven't Created an account, <br />
-          Sign In</a
-        >
-      </div>
     </div>
   </div>
 </template>
@@ -92,6 +99,7 @@
         email: null,
         password: null,
         name: null,
+        error: null,
       }
     },
     methods: {
@@ -112,7 +120,19 @@
             this.$router.push({ name: 'Home' })
           })
           .catch(err => {
-            console.error(err)
+            this.error = 'error'
+          })
+      },
+      loginUser() {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(data => {
+            this.$router.push({ name: 'Home' })
+          })
+          .catch(err => {
+            this.error = 'error'
+            this.password = null
           })
       },
     },

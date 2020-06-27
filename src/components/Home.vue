@@ -19,6 +19,12 @@
             Documnets
           </a>
         </div>
+        <button
+          class="border-2 bg-red-700 rounded p-3 m-2 justify-end text-white"
+          @click="logoutUser"
+        >
+          Log Out
+        </button>
       </div>
 
       <transition name="fade">
@@ -96,10 +102,20 @@
         const ref = databese.collection(this.collectionName)
         ref.onSnapshot(snapShot => {
           snapShot.docChanges().forEach(data => {
-            console.log(data.doc.data())
             this.notes.push(data.doc.data().note)
           })
         })
+      },
+
+      logoutUser() {
+        setInterval(() => {
+          firebase
+            .auth()
+            .signOut()
+            .then(() => {
+              this.$router.push('/')
+            })
+        }, 2000)
       },
     },
     created() {
@@ -109,20 +125,11 @@
         if (user) {
           this.userName = user.displayName
           this.collectionName = user.uid
-
           this.collectData()
         } else {
-          console.log('Not a registered user')
+          this.$router.push('/')
         }
       })
-
-      // const ref = databese.collection(this.collectionName)
-      // ref.onSnapshot(snapShot => {
-      //   snapShot.docChanges().forEach(data => {
-      //     console.log(data.doc.data())
-      //     this.notes.push(data.doc.data().note)
-      //   })
-      // })
     },
   }
 </script>

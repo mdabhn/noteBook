@@ -41,7 +41,7 @@
 
       <transition name="fade">
         <div class="flex mx-auto" v-if="showDocuments">
-          <Documnets :notes="notes" />
+          <Documnets :notes="notes" @DeleteNote="DeleteNote" />
         </div>
       </transition>
     </div>
@@ -85,6 +85,13 @@
         this.showDocuments = false
         this.message = false
       },
+      DeleteNote(id, index) {
+        this.notes.splice(index, 1)
+        databese
+          .collection(this.collectionName)
+          .doc(id)
+          .delete()
+      },
       addNote(data) {
         databese
           .collection(this.collectionName)
@@ -99,10 +106,15 @@
         this.message = false
       },
       collectData() {
+        this.notes = []
         const ref = databese.collection(this.collectionName)
         ref.onSnapshot(snapShot => {
           snapShot.docChanges().forEach(data => {
-            this.notes.push(data.doc.data().note)
+            let id = data.doc.id
+            this.notes.push({
+              note: data.doc.data().note,
+              id: data.doc.id,
+            })
           })
         })
       },
@@ -120,7 +132,6 @@
     },
     created() {
       this.message = true
-
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.userName = user.displayName

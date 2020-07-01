@@ -8,8 +8,16 @@
       <div v-for="(note, index) in notes" :key="index">
         <div
           class="border-2 m-2 shadow-md p-4 hover:bg-gray-300 ease-in-out duration-100 delay-75 cursor-pointer"
-          v-html="note"
-        ></div>
+          style="min-width:20rem"
+        >
+          <div v-html="note.note"></div>
+          <button
+            class="border-2 p-1 w-20 bg-red-700 text-white rounded-full hover:bg-red-800 float-right focus:outline-none"
+            @click="DeleteNote(note.id, index)"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -20,6 +28,11 @@
   export default {
     name: 'Documnets',
     props: ['notes'],
+    methods: {
+      DeleteNote(id, index) {
+        this.$emit('DeleteNote', id, index)
+      },
+    },
   }
 </script>
 
